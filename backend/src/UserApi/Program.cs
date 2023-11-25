@@ -9,6 +9,7 @@ using UserApi.Entities;
 using UserApi.Repositories;
 using UserApi.Helpers;
 using UserApi.DatabaseConfiguration;
+using UserApi.Middleware; // Add this line
 
 /// <summary>
 /// Entry point for the User API application.
@@ -60,7 +61,7 @@ var app = builder.Build();
 
 // Add a user to the database during the startup process only when running locally
 if (app.Environment.IsDevelopment())
-{  
+{
     // Create default admin user if it doesn't exist
     await UserDbSeeder.SeedUserAsync(app.Services);
 }
@@ -74,6 +75,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<JwtMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseMiddleware<ActivityLoggingMiddleware>(); // Add this line
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

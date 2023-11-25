@@ -30,4 +30,7 @@ public partial class User
     public DateTime? LastLogin { get; set; }
 
     public int? FailedLoginAttempts { get; set; }
+    public bool IsDisabled { get; set; }
+    public DateTime LastLoginTime { get; set; }
+
 }

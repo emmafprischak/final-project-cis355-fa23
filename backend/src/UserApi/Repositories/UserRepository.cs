@@ -65,5 +65,11 @@ public class UserRepository : IUserRepository
         return _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
+    public async Task UpdateUserAsync(User user) // Add this method
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+
     // ... Add other methods here as needed
 }

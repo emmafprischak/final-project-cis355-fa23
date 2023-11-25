@@ -14,7 +14,6 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
 
-
     public UserService(IUserRepository userRepository, IJwtUtils jwtUtils, IMapper mapper, IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository;
@@ -28,8 +27,8 @@ public class UserService : IUserService
         // get user from database
         var user = await _userRepository.GetUserByUsernameAsync(model.Username);
 
-        // return null if user not found
-        if (user == null) return null;
+        // return null if user not found or disabled
+        if (user == null || user.IsDisabled) return null;
 
         // check if the provided password matches the password in the database and return null if it doesn't
         if (!_passwordHasher.ValidatePassword(model.Password, user.PasswordHash, user.PasswordSalt)) return null;
@@ -37,7 +36,10 @@ public class UserService : IUserService
         // authentication successful so generate jwt token
         var token = _jwtUtils.GenerateJwtToken(user);
 
-        
+        // update last login time
+        user.LastLoginTime = DateTime.UtcNow;
+        await _userRepository.UpdateUserAsync(user);
+
         // map user and token to response model with Automapper and return
         return _mapper.Map<AuthenticateResponse>(user, opts => opts.Items["Token"] = token);
     }
@@ -65,7 +67,7 @@ public class UserService : IUserService
     public async Task<IEnumerable<UserResponse>> GetAllAsync()
     {
         var users = await _userRepository.GetAllUsersAsync();
-    
+
         return _mapper.Map<IEnumerable<UserResponse>>(users);
     }
 
