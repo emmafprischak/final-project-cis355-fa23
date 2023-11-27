@@ -76,4 +76,6 @@ public class UserService : IUserService
         var user = await _userRepository.GetUserByIdAsync(id);
         return _mapper.Map<UserResponse>(user);
     }
+
+
 }

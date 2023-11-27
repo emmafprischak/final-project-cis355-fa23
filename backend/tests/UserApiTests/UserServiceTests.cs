@@ -20,9 +20,9 @@ public class UserServiceTests
     public UserServiceTests()
     {
         _userService = new UserService(
-            _mockUserRepository.Object, 
-            _mockJwtUtils.Object, 
-            _mockMapper.Object, 
+            _mockUserRepository.Object,
+            _mockJwtUtils.Object,
+            _mockMapper.Object,
             _mockPasswordHasher.Object
         );
     }
