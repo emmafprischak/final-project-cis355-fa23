@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 using UserApi.Authorization;
 using UserApi.Extensions;
@@ -11,15 +9,18 @@ using UserApi.Entities;
 using UserApi.Repositories;
 using UserApi.Helpers;
 using UserApi.DatabaseConfiguration;
-using UserApi.Middleware;
+using UserApi.Middleware; // Add this line
 
+/// <summary>
+/// Entry point for the User API application.
+/// </summary>
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+// Add swagger gen with bearer token authentication
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "User API", Version = "v1" });
@@ -61,6 +62,7 @@ var app = builder.Build();
 // Add a user to the database during the startup process only when running locally
 if (app.Environment.IsDevelopment())
 {
+    // Create default admin user if it doesn't exist
     await UserDbSeeder.SeedUserAsync(app.Services);
 }
 
@@ -71,30 +73,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.Use(next => context =>
-{
-    string path = context.Request.Path.Value;
-    if (string.Equals(path, "/api/login", StringComparison.OrdinalIgnoreCase))
-    {
-        var tokens = context.RequestServices.GetRequiredService<IAntiforgery>().GetAndStoreTokens(context);
-        context.Response.Cookies.Append("X-CSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
-    }
-    return next(context);
-});
-
 app.UseMiddleware<JwtMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
-app.UseMiddleware<ActivityLoggingMiddleware>();
-
-app.Use(next => context =>
-{
-    if (context.Request.Method == HttpMethods.Post || context.Request.Method == HttpMethods.Put || context.Request.Method == HttpMethods.Delete)
-    {
-        context.RequestServices.GetRequiredService<IAntiforgery>().ValidateRequestAsync(context);
-    }
-    return next(context);
-});
-
+app.UseMiddleware<ActivityLoggingMiddleware>(); // Add this line
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
