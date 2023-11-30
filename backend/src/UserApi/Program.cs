@@ -79,4 +79,3 @@ app.UseMiddleware<ActivityLoggingMiddleware>(); // Add this line
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-
