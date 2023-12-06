@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using UserApi.Entities;
 using UserApi.Repositories;
-using UserApi.Helpers;
-using UserApi.DatabaseConfiguration;
-using UserApi.Middleware; // Add this line
+using UserApi.Helpers; // Add this line
 
 /// <summary>
 /// Entry point for the User API application.

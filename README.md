@@ -3,10 +3,28 @@
 ## Getting Started
 
 ### Initial Setup
-Before you run the application, set up the database by following these steps. This ensures everything works smoothly.
+1. Open Visual Studio Code
+2. Open Docker
+3. Open Postman
 
-### Prerequisites
-- Open the project in VS Code and connect to the provided Dev Container. 
+## Using GitHub
+1. Clone the repository from github, if you need it. (If not open, folder with code)
+
+## Visual Studio Code Dev Container Connection
+1.  On the bottom left of the Visual Code screen, click on the green square to then connect to the dev container.
+
+## Opening Docker
+1. Open Docker to make sure dev containers are running.
+
+
+## Postman
+1. Connect to the database
+2. send a post user request
+3. Make sure you can recieve the request as a Status Code 200 OK, if not troubleshoot.
+
+
+## Visual Studio Code Dev Container Connection
+1. On the bottom left of the Visual Code screen, click on the green square to then connect to the dev container.
 
 ### Database Configuration
 1. **Restore Dotnet Tools**: 
@@ -26,10 +44,10 @@ See the "Default Admin Account" section for more information on using this accou
 A default admin account is created automatically on the first startup in a development environment. It's designed for immediate access to administrative features.
 
 ### Account Details
-- **Username**: `admin`
+- **Username**: `postgres`
 - **Email**: `admin@admin.com`
 - **Password**: `password`
-- **Role**: `Admin`
+- **Role**: `postgres`
 
 ### Usage
 Use this account to sign in and access administrative areas. It's fully enabled for all features and settings, ideal for setup and testing.
