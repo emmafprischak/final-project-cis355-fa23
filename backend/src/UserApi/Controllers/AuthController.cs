@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
         var response = await _userService.Authenticate(model);
 
         if (response == null)
-            return BadRequest(new { message = "Username or password is incorrect" });
+            return BadRequest(new { message = "INCORRECT USERNAME OR PASSWORD :)" });
 
         return Ok(response);
     }
